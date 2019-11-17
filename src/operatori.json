@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "nume": "marcel_abrudan",
+    "numePrenume": "Abrudan Marcel",
+    "email": "mabrudan12@yahoo.com",
+    "locatie": "Alba"
+  },
+  {
+    "id": 2,
+    "nume": "ioana_babic",
+    "numePrenume": "Babic Ioana",
+    "email": "iobabic@gmail.com",
+    "locatie": "Cluj"
+  },
+  {
+    "id": 3,
+    "nume": "emil_eftimie",
+    "numePrenume": "Eftimie Emil",
+    "email": "emileftimie2@yahoo.com",
+    "locatie": "Botosani"
+  },
+  {
+    "id": 4,
+    "nume": "anda_neacsu",
+    "numePrenume": "Neacșu Anda",
+    "email": "andaneacsu32@yahoo.com",
+    "locatie": "Caraș Severin"
+  }
+]
