@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import "./randtabel.css";
 
 class RandTabel extends Component {
   render() {
-    const { operator, corectezOpTabel, stergOper } = this.props;
+    const { operator, corectezOper, stergOper } = this.props;
     const { nume, numePrenume, email, locatie, id } = operator;
     return (
       <tr>
@@ -15,7 +15,7 @@ class RandTabel extends Component {
         <td>{email}</td>
         <td>{locatie}</td>
         <td>
-          <button className="btn btn-link" onClick={corectezOpTabel} id={id}>
+          <button className="btn btn-link" onClick={corectezOper} id={id}>
             <FontAwesomeIcon icon={faUserEdit} />
           </button>
           <button className="btn btn-link" onClick={stergOper} id={id}>

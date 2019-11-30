@@ -1,17 +1,9 @@
 import React, { Component } from "react";
-
 class Formular extends Component {
   constructor(props) {
     super(props);
-    this.iniSta = {
-      nume: "",
-      numePrenume: "",
-      email: "",
-      locatie: ""
-    };
-
     //  Initializez obiectul "state"
-    this.state = this.iniSta;
+    this.state = this.props.oper;
 
     //  Functii de tratare a evenimentelor "change" si "submit"
     this.modifica = this.modifica.bind(this);
@@ -28,19 +20,11 @@ class Formular extends Component {
 
   onFormSubmit(ev) {
     ev.preventDefault();
-    //  Verific daca este editare sau operator nou
-    if (this.props.oper) {
-      this.props.corectezOpForm(this.state);
-    } else {
-      this.props.adaugOper(this.state);
-    }
-
-    this.setState(this.iniSta);
+    this.props.formSubmit(this.state);
   }
 
   render() {
     const { nume, numePrenume, email, locatie } = this.state;
-    console.log(`In Formular oper.nume: ${nume}`);
     return (
       <form onSubmit={this.onFormSubmit}>
         <div className="form-row">
