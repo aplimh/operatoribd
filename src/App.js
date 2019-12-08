@@ -77,19 +77,36 @@ class App extends Component {
       fetch("http://localhost/operatoribd/api/adaop.php", {
         body: formData,
         method: "post"
-      }).then(this.reincarc);
+      })
+        .then(rezultat => {
+          return rezultat.json();
+        })
+        .then(lista => {
+          this.setState({
+            opedit: {
+              id: 0,
+              nume: "",
+              numePrenume: "",
+              email: "",
+              locatie: ""
+            },
+            cheie: lista[1].id
+          });
+          this.reincarc();
+        });
     } else {
       //  Este o editare
       fetch("http://localhost/operatoribd/api/modiop.php", {
         body: formData,
         method: "post"
-      }).then(this.reincarc);
+      }).then(() => {
+        this.setState({
+          opedit: { id: 0, nume: "", numePrenume: "", email: "", locatie: "" },
+          cheie: 0
+        });
+        this.reincarc();
+      });
     }
-    //  Refac "state"
-    this.setState({
-      opedit: { id: 0, nume: "", numePrenume: "", email: "", locatie: "" },
-      cheie: 0
-    });
   }
 
   render() {
