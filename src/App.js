@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import LOperatori from "./operatori";
 import CorpTabel from "./corptabel";
 import Formular from "./formular";
 import "./App.css";
@@ -8,7 +7,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      operatori: LOperatori,
+      operatori: [],
       opedit: { id: 0, nume: "", numePrenume: "", email: "", locatie: "" },
       cheie: 0
     };
@@ -16,18 +15,37 @@ class App extends Component {
     this.stergOper = this.stergOper.bind(this);
     this.corectezOper = this.corectezOper.bind(this);
     this.formSubmit = this.formSubmit.bind(this);
+    this.reincarc = this.reincarc.bind(this);
+  }
+
+  reincarc() {
+    //  reincarc lista de contacte din baza de date
+
+    fetch("http://localhost/operatoribd/api/listaop.php")
+      .then(rezultat => {
+        return rezultat.json();
+      })
+      .then(lista => {
+        this.setState({ operatori: lista });
+      })
+      .catch(error => console.log("Request failed", error));
+  }
+
+  componentDidMount() {
+    this.reincarc();
   }
 
   //  In tabel s-a selectat stergere
   stergOper(ev) {
-    const { operatori } = this.state;
-    const sirNou = operatori.filter(item => {
-      return parseInt(item.id) !== parseInt(ev.target.id);
-      //  Obiectul care are id === idSup nu se copiaza in noul sir
-    });
-    this.setState({
-      operatori: sirNou
-    });
+    const idSup = ev.target.id;
+    //  Construiesc un obiect FormData
+    const formData = new FormData();
+    formData.append("id", parseInt(idSup));
+    //  Corectez in baza de date
+    fetch("http://localhost/operatoribd/api/delop.php", {
+      body: formData,
+      method: "post"
+    }).then(this.reincarc);
   }
 
   //  In tabel s-a selectat editare
@@ -39,7 +57,6 @@ class App extends Component {
       return parseInt(item.id) === idOper;
     });
     this.setState({
-      operatori: lOperatori,
       opedit: oper,
       cheie: idOper //  Important!!! Provoaca reconstruirea componentei "Formular"
     });
@@ -48,26 +65,28 @@ class App extends Component {
   //  In formular s-a selectat submit
 
   formSubmit(oper) {
-    const idOper = parseInt(oper.id);
-    let op;
+    //  Construiesc un obiect FormData
+    const formData = new FormData();
+    formData.append("id", parseInt(oper.id));
+    formData.append("nume", oper.nume);
+    formData.append("numePrenume", oper.numePrenume);
+    formData.append("email", oper.email);
+    formData.append("locatie", oper.locatie);
     if (parseInt(oper.id) === 0) {
-      //  Este o adaugare
-      oper.id = 1000; //  De fapt va fi un id adevarat, venit din baza de date!
-      op = [...this.state.operatori, oper];
+      //  Este o adaugare. Incarc contactul in baza de date
+      fetch("http://localhost/operatoribd/api/adaop.php", {
+        body: formData,
+        method: "post"
+      }).then(this.reincarc);
     } else {
       //  Este o editare
-      const opEd = this.state.operatori;
-      op = opEd.map(item => {
-        if (parseInt(item.id) === idOper) {
-          return oper;
-        } else {
-          return item;
-        }
-      });
+      fetch("http://localhost/operatoribd/api/modiop.php", {
+        body: formData,
+        method: "post"
+      }).then(this.reincarc);
     }
     //  Refac "state"
     this.setState({
-      operatori: op,
       opedit: { id: 0, nume: "", numePrenume: "", email: "", locatie: "" },
       cheie: 0
     });
