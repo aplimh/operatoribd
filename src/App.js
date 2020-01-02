@@ -21,16 +21,11 @@ class App extends Component {
   reincarc() {
     //  reincarc lista de contacte din baza de date
 
-    return (
-      fetch("http://localhost/operatoribd/api/listaop.php")
-        .then(rezultat => {
-          return rezultat.json();
-        })
-        //  .then(lista => {
-        //    this.setState({ operatori: lista });
-        //  })
-        .catch(error => console.log("Request failed", error))
-    );
+    return fetch("http://localhost/operatoribd/api/operatori.php")
+      .then(rezultat => {
+        return rezultat.json();
+      })
+      .catch(error => console.log("Request failed", error));
   }
 
   componentDidMount() {
@@ -42,15 +37,15 @@ class App extends Component {
   //  In tabel s-a selectat stergere
   stergOper(ev) {
     //  Construiesc sirul de caractere care se trimite scriptului PHP
-    const dateScript = `id=${ev.target.id}`;
+    const dateScript = JSON.stringify({ id: parseInt(ev.target.id) });
     const config = {
-      method: "POST",
-      headers: { "Content-type": "application/x-www-form-urlencoded" },
-      body: dateScript // body data type must match "Content-Type" header
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: dateScript
     };
 
     //  Corectez in baza de date
-    fetch("http://localhost/operatoribd/api/delop.php", config)
+    fetch("http://localhost/operatoribd/api/operatori.php", config)
       .then(this.reincarc) //  this.reincarc a returnat lista decodficata
       .then(lista => this.setState({ operatori: lista }));
   }
@@ -78,20 +73,15 @@ class App extends Component {
   //  In formular s-a selectat submit
 
   formSubmit(oper) {
-    const dateScript =
-      `id=${parseInt(oper.id)}` +
-      `&nume=${oper.nume}` +
-      `&numePrenume=${oper.numePrenume}` +
-      `&email=${oper.email}` +
-      `&locatie=${oper.locatie}`;
-    const config = {
+    const dateScript = JSON.stringify(oper);
+    let config = {
       method: "POST",
-      headers: { "Content-type": "application/x-www-form-urlencoded" },
-      body: dateScript // body data type must match "Content-Type" header
+      headers: { "Content-type": "application/json" },
+      body: dateScript
     };
     if (parseInt(oper.id) === 0) {
       //  Este o adaugare. Incarc contactul in baza de date
-      const url = "http://localhost/operatoribd/api/adaop.php";
+      const url = "http://localhost/operatoribd/api/operatori.php";
       let id = 0;
       fetch(url, config)
         .then(rezultat => {
@@ -115,7 +105,8 @@ class App extends Component {
       });
     } else {
       //  Este o editare
-      const url = "http://localhost/operatoribd/api/modiop.php";
+      const url = "http://localhost/operatoribd/api/operatori.php";
+      config.method = "PUT";
       fetch(url, config).then(rezultat => {
         return rezultat.json();
       });
