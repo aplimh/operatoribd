@@ -111,7 +111,7 @@ class App extends Component {
         .then(rezultat => {
           return rezultat.json();
         })
-        .then(
+        .then(() => {
           this.reincarc().then(lista => {
             this.setState({
               operatori: lista,
@@ -124,8 +124,8 @@ class App extends Component {
               },
               cheie: 0
             });
-          })
-        );
+          });
+        });
     }
   }
 
