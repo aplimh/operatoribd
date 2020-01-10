@@ -3,16 +3,18 @@ import RandTabel from "./randtabel";
 class CorpTabel extends Component {
   render() {
     const { operatori, corectezOper, stergOper } = this.props;
-    const lista = operatori.map(item => (
-      <RandTabel
-        operator={item}
-        corectezOper={corectezOper}
-        stergOper={stergOper}
-        key={item.id}
-      />
-    ));
+    if (operatori) {
+      const lista = operatori.map(item => (
+        <RandTabel
+          operator={item}
+          corectezOper={corectezOper}
+          stergOper={stergOper}
+          key={item.id}
+        />
+      ));
 
-    return lista;
+      return lista;
+    } else return null;
   }
 }
 
